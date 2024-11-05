@@ -3,8 +3,6 @@ providers:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     network: "housekpr-network"
-  file:
-    directory: "/etc/traefik/rules"
 
 api:
   dashboard: true
@@ -16,16 +14,29 @@ api:
 entryPoints:
   http:
     address: ":80"
-    http:
-      redirections:
-        entryPoint:
-          to: https
-          scheme: https
   https:
     address: ":443"
-    http:
-      tls:
-        certResolver: letsEncrypt
+
+http:
+  routers:
+    http-catchall:
+      rule: Host(`traefik.housekpr.ru`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      entrypoints:
+        - http
+      middlewares:
+        - redirect-to-https
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: false
+    tls:
+      certResolver: letsEncrypt
+    traefik-auth:
+      basicAuth:
+        removeHeader: true
+        users:
+          - "admin:$$apr1$$9IQR1JyP$$MBiJhN12/ZIGnDs5uwOm00"
 
 # Чтобы использовать шифрованный протокол HTTPS, необходимо где-то взять SSL сертификаты.
 # Traefik позволяет автоматически получать бесплатные сертификаты Let’s Encrypt
