@@ -1,0 +1,47 @@
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: "housekpr-network"
+  file:
+    directory: "/etc/traefik/rules"
+
+api:
+  dashboard: true
+#  insecure: false
+
+# Две точки входа в наш прокси.
+# Таким образом из вне будут доступны порты 80 и 443 для протоколов HTTP и HTTPS соответственно.
+# Причем Traefik автоматически будет производить редирект на защищенное соединение
+entryPoints:
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: ":443"
+    http:
+      tls:
+        certResolver: letsEncrypt
+
+# Чтобы использовать шифрованный протокол HTTPS, необходимо где-то взять SSL сертификаты.
+# Traefik позволяет автоматически получать бесплатные сертификаты Let’s Encrypt
+certificatesResolvers:
+  letsEncrypt:
+    acme:
+      email: e.lobanovsky@yandex.ru
+#      файл, куда будут сохраняться данные о полученных сертификатах;
+      storage: acme.json
+      #Позволяет использовать не основной сервер Let's Encrypt в тестовых целях,
+      #так как основной имеет строгие лимиты API (можно закомментировать, когда наладите получение сертификатов).
+      #В поле caServer указан тестовый сервер для того чтобы не получить лимит обращений к основному серверу.
+      #После того как вы все настроите необходимо будет закомментировать данную строку.
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: http
+
+log:
+  level: INFO

@@ -1,0 +1,5 @@
+/private/
+/docker-compose-local.yml
+/config/acme.json
+/config/api.yml
+/docker-compose.yml
