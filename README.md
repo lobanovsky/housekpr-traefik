@@ -5,25 +5,11 @@ Traefik v3 + автоматические SSL-сертификаты Let's Encry
 ## Структура
 
 ```
-docker-compose.yml        — два сервиса: docker-proxy и traefik
-traefik.yml               — основной конфиг Traefik
-nginx-docker-proxy.conf   — конфиг nginx-прокси для Docker socket
-rules/                    — дополнительные роутеры (file provider)
-acme.json                 — сертификаты Let's Encrypt (не в git)
+docker-compose.yml   — сервис traefik
+traefik.yml          — основной конфиг Traefik
+rules/               — дополнительные роутеры (file provider)
+acme.json            — сертификаты Let's Encrypt (не в git)
 ```
-
-## Почему docker-proxy
-
-Docker Engine 27+ поднял минимальную поддерживаемую версию API с 1.24 до 1.40.
-Traefik жёстко зашивает версию 1.24 в Go SDK при первом подключении к Docker — это не
-меняется настройками или переменными окружения.
-
-Решение: nginx-контейнер `docker-proxy` стоит между Traefik и Docker socket и
-переписывает `/v1.24/` → `/v1.45/` в URL каждого запроса. Traefik подключается
-по `tcp://docker-proxy:2375` вместо прямого монтирования сокета.
-
-Это также рекомендованная Traefik практика безопасности: прямой доступ к Docker socket
-из Traefik опасен — компрометация Traefik даёт полный доступ к Docker daemon.
 
 ## Деплой
 
