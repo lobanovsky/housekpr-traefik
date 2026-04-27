@@ -1,0 +1,17 @@
+http:
+  routers:
+    dashboard:
+      rule: Host(`traefik.housekpr.ru`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      entryPoints:
+        - "https"
+      service: "api@internal"
+      middlewares: "traefik-auth@file"
+      tls:
+        certResolver: letsEncrypt
+
+  middlewares:
+    traefik-auth:
+      basicAuth:
+        removeHeader: true
+        users:
+          - "admin:$$apr1$$9IQR1JyP$$MBiJhN12/ZIGnDs5uwOm00"

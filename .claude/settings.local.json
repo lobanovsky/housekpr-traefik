@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh mr17dom1 *)",
+      "Bash(ssh ubuntu *)",
+      "Bash(ssh -o ConnectTimeout=10 ubuntu \"docker ps && docker logs traefik 2>&1 | tail -10\")",
+      "Bash(ssh -o ConnectTimeout=5 ubuntu \"echo ok\")"
+    ]
+  }
+}
