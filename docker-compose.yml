@@ -11,7 +11,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       - ./rules:/etc/traefik/rules
-      - traefik_acme:/etc/traefik/acme.json
+      - ./acme:/etc/traefik/acme
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=https"
@@ -28,6 +28,3 @@ services:
 networks:
   housekpr-network:
     external: true
-
-volumes:
-  traefik_acme:
