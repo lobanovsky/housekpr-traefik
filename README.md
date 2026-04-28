@@ -8,7 +8,7 @@ Traefik v3 + автоматические SSL-сертификаты Let's Encry
 docker-compose.yml   — сервис traefik
 traefik.yml          — основной конфиг Traefik
 rules/               — дополнительные роутеры (file provider)
-acme/acme.json       — сертификаты Let's Encrypt (не в git)
+acme.json            — сертификаты Let's Encrypt (не в git)
 ```
 
 ## Деплой
@@ -17,9 +17,8 @@ acme/acme.json       — сертификаты Let's Encrypt (не в git)
 # создать сеть если не существует
 docker network create housekpr-network
 
-# создать пустой acme/acme.json с правильными правами
-mkdir -p acme
-touch acme/acme.json && chmod 600 acme/acme.json
+# создать пустой acme.json с правильными правами
+touch acme.json && chmod 600 acme.json
 
 docker compose up -d
 ```
