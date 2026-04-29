@@ -39,7 +39,7 @@ certificatesResolvers:
       #так как основной имеет строгие лимиты API (можно закомментировать, когда наладите получение сертификатов).
       #В поле caServer указан тестовый сервер для того чтобы не получить лимит обращений к основному серверу.
       #После того как вы все настроите необходимо будет закомментировать данную строку.
-      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      #caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       httpChallenge:
         entryPoint: http
 
